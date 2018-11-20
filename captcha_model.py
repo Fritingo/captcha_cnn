@@ -17,7 +17,7 @@ def rgb2gray(rgb):
 def toonehot(text):
     labellist = []
     for letter in text:
-        onehot = [0 for _ in range(10)]
+        onehot = [0 for _ in range(letters.len)]
         num = letters.find(letter)
         onehot[num] = 1
         labellist.append(onehot)
