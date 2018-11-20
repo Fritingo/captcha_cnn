@@ -3,10 +3,6 @@ import csv
 import random
 import os
 
-letters = "0123456789abcdefghijklimnpqrstuvwxyzABCDEFGHIJKLIMNPQRSTUVWXYZ"
-# letters = "0123456789"
-
-
 def captcha_cs(path,i):#create and save
   img = ImageCaptcha(width=160, height=60, fonts=None, font_sizes=None)
 
@@ -16,6 +12,9 @@ def captcha_cs(path,i):#create and save
   image.save(str(i)+'.jpg')
 
 if __name__ == "__main__":
+  letters = "0123456789abcdefghijklimnpqrstuvwxyzABCDEFGHIJKLIMNPQRSTUVWXYZ"
+# letters = "0123456789"
+
   file = open('train_label.csv', 'w')#csv_file_name
   writer = csv.writer(file)
   for i in range(0,20000):
