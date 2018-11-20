@@ -6,12 +6,6 @@ import numpy as np
 import csv
 import cv2
 
-digit1 = []
-digit2 = []
-digit3 = []
-digit4 = []
-
-
 def rgb2gray(rgb):
     r, g, b = rgb[:,:,:,0], rgb[:,:,:,1], rgb[:,:,:,2]
     gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
