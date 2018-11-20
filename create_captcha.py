@@ -16,13 +16,13 @@ def captcha_cs(path):#create and save
   image.save(l1+l2+l3+l4+'.jpg')
 
 if __name__ == "__main__":
-  file = open('test.csv', 'w')#csv_file_name
+  file = open('train_label.csv', 'w')#csv_file_name
   writer = csv.writer(file)
-  for i in range(0,10):
+  for i in range(0,20000):
     l1 = random.choice(letters)
     l2 = random.choice(letters)
     l3 = random.choice(letters)
     l4 = random.choice(letters)
     writer.writerow([l1 + l2 + l3 + l4, l1, l2, l3, l4])
-    captcha_cs("/home/cbc106013/deep_learning/captcha/test")#dir_path
+    captcha_cs("/home/cbc106013/deep_learning/captcha/train_captcha")#dir_path
   #print(l1+l2+l3+l4)
