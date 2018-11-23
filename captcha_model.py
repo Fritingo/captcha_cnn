@@ -25,6 +25,11 @@ def toonehot(text):
     return labellist
 
 #==========================train_data
+<<<<<<< HEAD
+=======
+traincsv = open('./train_label.csv', 'r', encoding = 'utf8')
+train_data = np.stack([np.array(Image.open("/home/cbc106013/deep_learning/captcha/train_captcha/" + row[0] + ".jpg"))/255.0 for row in csv.reader(traincsv)])
+>>>>>>> 42b37a25b8f448d5026ab0a7903826e8376359b6
 
 # a = np.concatenate((a,b),axis=0)
 # print(a)
@@ -56,6 +61,7 @@ print(train_data.shape)
 digit = []
 
 for i in range(1,5,1):
+<<<<<<< HEAD
     for j in range(1,5):
         file = open('./label_csv/train_label'+str(j)+'.csv', 'r')  # csv_file_name
         reader = csv.reader(file)
@@ -80,12 +86,25 @@ train_label = digit.reshape(4, -1, 63)
 # #==========================2y
 # train_label = digit.reshape(4,-1,63)
 #==========================
+=======
+    file = open('train_label.csv', 'r')  # csv_file_name
+    reader = csv.reader(file)
+    for row in reader:
+        digit.append(row[i])
+
+print(digit)
+#==========================csv2one_hot
+digit = np.array(toonehot(digit))
+#==========================2y
+train_label = digit.reshape(4,-1,63)
+>>>>>>> 42b37a25b8f448d5026ab0a7903826e8376359b6
 print(train_label)
 print(train_label.shape)
 
 
 train_label = [arr for arr in np.asarray(train_label)]
 print(train_label)
+<<<<<<< HEAD
 #===================================test
 for i in range(1,2):
     test_data_temporary = np.load("./img_data_gray/test_data"+str(i)+".npy")
@@ -93,6 +112,14 @@ for i in range(1,2):
         test_data = test_data_temporary
     else:
         test_data = np.concatenate((test_data,test_data_temporary),axis=0)
+=======
+#==========================test_data
+testcsv = open('./test_label.csv', 'r', encoding = 'utf8')
+test_data = np.stack([np.array(Image.open("/home/cbc106013/deep_learning/captcha/test_captcha/" + row[0] + ".jpg"))/255.0 for row in csv.reader(testcsv)])
+
+#==========================rgb2gray
+test_data=rgb2gray(test_data)
+>>>>>>> 42b37a25b8f448d5026ab0a7903826e8376359b6
 test_data= test_data.reshape(-1,60,160,1)
 print(test_data.shape)
 
@@ -101,6 +128,7 @@ print(test_data.shape)
 digit_test = []
 
 for i in range(1,5,1):
+<<<<<<< HEAD
     for j in range(1,2):
         file = open('./label_csv/test_label'+str(j)+'.csv', 'r')  # csv_file_name
         reader = csv.reader(file)
@@ -110,6 +138,18 @@ file.close()
 digit_test = np.array(toonehot(digit_test))
 test_label = digit_test.reshape(4, -1, 63)
 
+=======
+    file = open('test_label.csv', 'r')  # csv_file_name
+    reader = csv.reader(file)
+    for row in reader:
+        digit.append(row[i])
+
+print(digit)
+#==========================csv2one_hot
+digit = np.array(toonehot(digit))
+#==========================2y
+test_label = digit.reshape(4,-1,63)
+>>>>>>> 42b37a25b8f448d5026ab0a7903826e8376359b6
 print(test_label)
 print(test_label.shape)
 
@@ -201,4 +241,8 @@ tensorBoard = TensorBoard(log_dir = "./logs", histogram_freq = 1)
 #===========================回調函數
 callbacks_list = [checkpoint, tensorBoard] #earlystop
 #===========================
+<<<<<<< HEAD
 model.fit(train_data, train_label, batch_size=400, epochs=150, verbose=1, validation_data=(test_data, test_label), callbacks=callbacks_list)
+=======
+model.fit(train_data, train_label, batch_size=400, epochs=150, verbose=1, validation_data=(test_data, test_label), callbacks=callbacks_list)
+>>>>>>> 42b37a25b8f448d5026ab0a7903826e8376359b6
