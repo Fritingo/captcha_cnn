@@ -4,12 +4,8 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
 from PIL import Image
 import numpy as np
 import csv
-import cv2
 
-digit1 = []
-digit2 = []
-digit3 = []
-digit4 = []
+
 
 
 def rgb2gray(rgb):
@@ -17,23 +13,35 @@ def rgb2gray(rgb):
     gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
     return gray
 
-# letters = "0123456789abcdefghijklimnpqrstuvwxyzABCDEFGHIJKLIMNPQRSTUVWXYZ"
-letters = "0123456789"
+letters = "0123456789abcdefghijklimnpqrstuvwxyzABCDEFGHIJKLIMNPQRSTUVWXYZ"
+# letters = "0123456789"
 def toonehot(text):
     labellist = []
     for letter in text:
-        onehot = [0 for _ in range(10)]
+        onehot = [0 for _ in range(63)]
         num = letters.find(letter)
         onehot[num] = 1
         labellist.append(onehot)
     return labellist
 
 #==========================train_data
-traincsv = open('./test.csv', 'r', encoding = 'utf8')
-train_data = np.stack([np.array(Image.open("/home/cbc106013/deep_learning/captcha/test/" + row[0] + ".jpg"))/255.0 for row in csv.reader(traincsv)])
 
-#==========================rgb2gray
-train_data=rgb2gray(train_data)
+# a = np.concatenate((a,b),axis=0)
+# print(a)
+# print(a.shape)
+
+for i in range(1,5):
+    print(i)
+    train_data_temporary = np.load("./img_data_gray/train_data"+str(i)+".npy")
+    if i == 1:
+        train_data = train_data_temporary
+    else:
+        train_data = np.concatenate((train_data,train_data_temporary),axis=0)
+# traincsv = open('./train_label.csv', 'r', encoding = 'utf8')
+# train_data = np.stack([np.array(Image.open("/home/cbc106013/deep_learning/captcha/train_captcha/" + row[0] + ".jpg"))/255.0 for row in csv.reader(traincsv)])
+#
+# #==========================rgb2gray
+# train_data=rgb2gray(train_data)
 
 train_data= train_data.reshape(-1,60,160,1)
 print(train_data.shape)
@@ -48,66 +56,118 @@ print(train_data.shape)
 digit = []
 
 for i in range(1,5,1):
-    file = open('test.csv', 'r')  # csv_file_name
-    reader = csv.reader(file)
-    for row in reader:
-        digit.append(row[i])
-
-print(digit)
-#==========================csv2one_hot
+    for j in range(1,5):
+        file = open('./label_csv/train_label'+str(j)+'.csv', 'r')  # csv_file_name
+        reader = csv.reader(file)
+        for row in reader:
+            digit.append(row[i])
+file.close()
 digit = np.array(toonehot(digit))
-#==========================2y
-train_label = digit.reshape(4,-1,10)
+train_label = digit.reshape(4, -1, 63)
+
+#==========================old
+# digit = []
+#
+# for i in range(1,5,1):
+#     file = open('train_label.csv', 'r')  # csv_file_name
+#     reader = csv.reader(file)
+#     for row in reader:
+#         digit.append(row[i])
+#
+# print(digit)
+# #==========================csv2one_hot
+# digit = np.array(toonehot(digit))
+# #==========================2y
+# train_label = digit.reshape(4,-1,63)
+#==========================
 print(train_label)
 print(train_label.shape)
 
 
 train_label = [arr for arr in np.asarray(train_label)]
 print(train_label)
-#==========================test_data
-testcsv = open('./test_y.csv', 'r', encoding = 'utf8')
-test_data = np.stack([np.array(Image.open("/home/cbc106013/deep_learning/captcha/test_y/" + row[0] + ".jpg"))/255.0 for row in csv.reader(testcsv)])
-
-#==========================rgb2gray
-test_data=rgb2gray(test_data)
+#===================================test
+for i in range(1,2):
+    test_data_temporary = np.load("./img_data_gray/test_data"+str(i)+".npy")
+    if i == 1:
+        test_data = test_data_temporary
+    else:
+        test_data = np.concatenate((test_data,test_data_temporary),axis=0)
 test_data= test_data.reshape(-1,60,160,1)
+print(test_data.shape)
 
-#==========================csv load
-# testcsv = open('test_y.csv', 'r', encoding = 'utf8')
-# read_label = [toonehot(row[0]) for row in csv.reader(testcsv)]
-# test_label = [[] for _ in range(4)]
-# for arr in read_label:
-#     for index in range(4):
-#         test_label[index].append(arr[index])
-# test_label = [arr for arr in np.asarray(test_label)]
-# print(test_label)
-digit = []
+
+
+digit_test = []
 
 for i in range(1,5,1):
-    file = open('test_y.csv', 'r')  # csv_file_name
-    reader = csv.reader(file)
-    for row in reader:
-        digit.append(row[i])
+    for j in range(1,2):
+        file = open('./label_csv/test_label'+str(j)+'.csv', 'r')  # csv_file_name
+        reader = csv.reader(file)
+        for row in reader:
+            digit_test.append(row[i])
+file.close()
+digit_test = np.array(toonehot(digit_test))
+test_label = digit_test.reshape(4, -1, 63)
 
-print(digit)
-#==========================csv2one_hot
-digit = np.array(toonehot(digit))
-#==========================2y
-test_label = digit.reshape(4,-1,10)
 print(test_label)
 print(test_label.shape)
+
+
 test_label = [arr for arr in np.asarray(test_label)]
+print(test_label)
+#==========================================================old
+# #==========================test_data
+# testcsv = open('./test_label.csv', 'r', encoding = 'utf8')
+# test_data = np.stack([np.array(Image.open("/home/cbc106013/deep_learning/captcha/test_captcha/" + row[0] + ".jpg"))/255.0 for row in csv.reader(testcsv)])
+#
+# #==========================rgb2gray
+# test_data=rgb2gray(test_data)
+# test_data= test_data.reshape(-1,60,160,1)
+#
+# #==========================csv load
+# # testcsv = open('test_y.csv', 'r', encoding = 'utf8')
+# # read_label = [toonehot(row[0]) for row in csv.reader(testcsv)]
+# # test_label = [[] for _ in range(4)]
+# # for arr in read_label:
+# #     for index in range(4):
+# #         test_label[index].append(arr[index])
+# # test_label = [arr for arr in np.asarray(test_label)]
+# # print(test_label)
+# digit = []
+#
+# for i in range(1,5,1):
+#     file = open('test_label.csv', 'r')  # csv_file_name
+#     reader = csv.reader(file)
+#     for row in reader:
+#         digit.append(row[i])
+#
+# print(digit)
+# #==========================csv2one_hot
+# digit = np.array(toonehot(digit))
+# #==========================2y
+# test_label = digit.reshape(4,-1,63)
+#===================================================================
+
 
 # Create CNN Model
 print("Creating CNN model...")
 # in = Input((60,160))
 input = Input(shape=(60,160,1), name='Input')
 out = input
+out = Conv2D(filters=8, kernel_size=(3, 3), padding='same', activation='relu')(out)
+out = Conv2D(filters=8, kernel_size=(3, 3), activation='relu')(out)
+out = BatchNormalization()(out)
+out = Conv2D(filters=16, kernel_size=(3, 3), padding='same', activation='relu')(out)
+out = Conv2D(filters=16, kernel_size=(3, 3), activation='relu')(out)
+out = BatchNormalization()(out)
+# out = MaxPooling2D(pool_size=(2, 2))(out)
 out = Conv2D(filters=32, kernel_size=(3, 3), padding='same', activation='relu')(out)
 out = Conv2D(filters=32, kernel_size=(3, 3), activation='relu')(out)
 out = BatchNormalization()(out)
 out = MaxPooling2D(pool_size=(2, 2))(out)
 out = Dropout(0.3)(out)
+
 out = Conv2D(filters=64, kernel_size=(3, 3), padding='same', activation='relu')(out)
 out = Conv2D(filters=64, kernel_size=(3, 3), activation='relu')(out)
 out = BatchNormalization()(out)
@@ -119,14 +179,13 @@ out = BatchNormalization()(out)
 out = MaxPooling2D(pool_size=(2, 2))(out)
 out = Dropout(0.3)(out)
 out = Conv2D(filters=256, kernel_size=(3, 3), activation='relu')(out)
-out = BatchNormalization()(out)
 out = MaxPooling2D(pool_size=(2, 2))(out)
 out = Dropout(0.3)(out)
 out = Flatten()(out)
-out = [Dense(10, name='digit1', activation='softmax')(out),\
-    Dense(10, name='digit2', activation='softmax')(out),\
-    Dense(10, name='digit3', activation='softmax')(out),\
-    Dense(10, name='digit4', activation='softmax')(out)]
+out = [Dense(63, name='digit1', activation='softmax')(out),\
+    Dense(63, name='digit2', activation='softmax')(out),\
+    Dense(63, name='digit3', activation='softmax')(out),\
+    Dense(63, name='digit4', activation='softmax')(out)]
 model = Model(input, out)
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.summary()#show
@@ -135,11 +194,11 @@ model.summary()#show
 filepath="./model/captcha4.h5"
 #==========================每次epoch完會檢查一次，如果比先前最佳的acc高，就會儲存model到filepath
 checkpoint = ModelCheckpoint(filepath, monitor='val_digit3_acc', verbose=1, save_best_only=True, mode='max')
-#===========================也就是在驗證集的val_digit4_acc連續5次不再下降時，就會提早結束訓練
-earlystop = EarlyStopping(monitor='val_digit4_acc', patience=15, verbose=1, mode='auto')
+#===========================也就是在驗證集的val_digit4_acc 下降後60次提前停止訓練
+#earlystop = EarlyStopping(monitor='val_digit3_acc', patience=60, verbose=1, mode='auto')
 #===========================圖形化界面
 tensorBoard = TensorBoard(log_dir = "./logs", histogram_freq = 1)
 #===========================回調函數
-callbacks_list = [checkpoint, earlystop, tensorBoard]
+callbacks_list = [checkpoint, tensorBoard] #earlystop
 #===========================
-model.fit(train_data, train_label, batch_size=400, epochs=100, verbose=1, validation_data=(test_data, test_label), callbacks=callbacks_list)
+model.fit(train_data, train_label, batch_size=400, epochs=150, verbose=1, validation_data=(test_data, test_label), callbacks=callbacks_list)
