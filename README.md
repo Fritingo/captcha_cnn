@@ -3,6 +3,10 @@ hack captcha by cnn with keras
 
 # 奕文計畫
 
+
+![image](https://github.com/cbc106013/captcha_cnn/blob/master/acc94%25.png)
+
+
 ## Reference Material at Issues
 
 <p>captcha.jpg in</p>
