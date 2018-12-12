@@ -1,9 +1,9 @@
 import shutil
 import requests
 import time
-SAVEPATH = "./photo/"
+SAVEPATH = "/home/cbc106013/deep_learning/captcha/nptu/"
 url = 'https://webap.nptu.edu.tw/Web/Modules/CaptchaCreator.aspx?3530'#'http://railway1.hinet.net/ImageOut.jsp'
-for i in range(1, 3000):
+for i in range(1, 10000):
     response = requests.get(url, stream=True)
     print(response)
     print("=========================================")

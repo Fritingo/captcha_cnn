@@ -46,14 +46,14 @@ def toonehot(text):
     return labellist
 
 #==========================train_data
-traincsv = open('./test_label2.csv', 'r', encoding = 'utf8')
-train_data = np.stack([np.array(Image.open("/home/cbc106013/deep_learning/captcha/test_captcha2/" + row[0] + ".jpg"))/255.0 for row in csv.reader(traincsv)])
+traincsv = open('./retry.csv', 'r', encoding = 'utf8')
+train_data = np.stack([np.array(Image.open("/home/cbc106013/deep_learning/captcha/retry/" + row[0] + ".jpg"))/255.0 for row in csv.reader(traincsv)])
 
 #==========================rgb2gray
 train_data=rgb2gray(train_data)
 
 print(train_data)
 
-# np.save("test_data2.npy",train_data)
+np.save("test_data2.npy",train_data)
 # train_data= train_data.reshape(-1,60,160,1)
-# print(train_data.shape)
+print(train_data.shape)
