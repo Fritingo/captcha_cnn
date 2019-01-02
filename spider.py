@@ -1,9 +1,9 @@
 import shutil
 import requests
 import time
-SAVEPATH = "/home/cbc106013/deep_learning/captcha/nptu/"
+SAVEPATH = "/home/cbc106013/deep_learning/captcha/nptu3/"
 url = 'https://webap.nptu.edu.tw/Web/Modules/CaptchaCreator.aspx?3530'#'http://railway1.hinet.net/ImageOut.jsp'
-for i in range(1, 10000):
+for i in range(0, 20000):
     response = requests.get(url, stream=True)
     print(response)
     print("=========================================")
@@ -15,7 +15,7 @@ for i in range(1, 10000):
         print(out_file)
         print('###############################################')
     del response
-    time.sleep(0.5)
+    time.sleep(0.1)
 # import requests
 #
 # import urllib.request

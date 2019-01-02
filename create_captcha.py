@@ -4,13 +4,13 @@ import random
 import os
 
 
-letters = "0123456789abcdefghijklimnpqrstuvwxyzABCDEFGHIJKLIMNPQRSTUVWXYZ"
-# letters = "0123456789"
+# letters = "0123456789abcdefghijklimnpqrstuvwxyzABCDEFGHIJKLIMNPQRSTUVWXYZ"
+letters = "0123456789"
 
 
 
 def captcha_cs(path,i):#create and save
-  img = ImageCaptcha(width=160, height=60, fonts=None, font_sizes=None)
+  img = ImageCaptcha(width=95, height=35, fonts=None, font_sizes=None)
 
   image = img.generate_image(l1+l2+l3+l4)
   # image.show()
@@ -19,10 +19,10 @@ def captcha_cs(path,i):#create and save
 
 if __name__ == "__main__":
 
-  file = open('retry.csv', 'w')#csv_file_name
+  file = open('nptu_create3.csv', 'w')#csv_file_name
 
-  letters = "0123456789abcdefghijklimnpqrstuvwxyzABCDEFGHIJKLIMNPQRSTUVWXYZ"
-# letters = "0123456789"
+  # letters = "0123456789abcdefghijklimnpqrstuvwxyzABCDEFGHIJKLIMNPQRSTUVWXYZ"
+  letters = "0123456789"
 
   #file = open('train_label.csv', 'w')#csv_file_name
 
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     l4 = random.choice(letters)
     writer.writerow([i, l1, l2, l3, l4])
 
-    captcha_cs("/home/cbc106013/deep_learning/captcha/retry",i)#dir_path
+    captcha_cs("/home/cbc106013/deep_learning/captcha/nptu_create3",i)#dir_path
   #print(l1+l2+l3+l4)
 
     #captcha_cs("/home/cbc106013/deep_learning/captcha/train_captcha",i)#dir_path

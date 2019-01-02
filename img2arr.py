@@ -34,26 +34,28 @@ def rgb2gray(rgb):
     gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
     return gray
 
-letters = "0123456789abcdefghijklimnpqrstuvwxyzABCDEFGHIJKLIMNPQRSTUVWXYZ"
-# letters = "0123456789"
+# letters = "0123456789abcdefghijklimnpqrstuvwxyzABCDEFGHIJKLIMNPQRSTUVWXYZ"
+letters = "0123456789"
 def toonehot(text):
     labellist = []
     for letter in text:
-        onehot = [0 for _ in range(63)]
+        onehot = [0 for _ in range(10)]
         num = letters.find(letter)
         onehot[num] = 1
         labellist.append(onehot)
     return labellist
 
-#==========================train_data
-traincsv = open('./retry.csv', 'r', encoding = 'utf8')
-train_data = np.stack([np.array(Image.open("/home/cbc106013/deep_learning/captcha/retry/" + row[0] + ".jpg"))/255.0 for row in csv.reader(traincsv)])
-
+#==========================create_train_data_from_self
+# traincsv = open('./nptu_create3.csv', 'r', encoding = 'utf8')
+# train_data = np.stack([np.array(Image.open("/home/cbc106013/deep_learning/captcha/nptu_create3/" + row[0] + ".jpg"))/255.0 for row in csv.reader(traincsv)])
+#==========================spider_data
+train_data = np.stack([np.array(Image.open("/home/cbc106013/deep_learning/captcha/nptu3/"+ str(i) + ".jpg"))/255.0 for i in range(0,10000)])
+print(train_data.shape)
 #==========================rgb2gray
 train_data=rgb2gray(train_data)
 
 print(train_data)
 
-np.save("test_data2.npy",train_data)
+np.save("nptu3.npy",train_data)
 # train_data= train_data.reshape(-1,60,160,1)
 print(train_data.shape)

@@ -13,12 +13,12 @@ def rgb2gray(rgb):
     gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
     return gray
 
-letters = "0123456789abcdefghijklimnpqrstuvwxyzABCDEFGHIJKLIMNPQRSTUVWXYZ"
-# letters = "0123456789"
+# letters = "0123456789abcdefghijklimnpqrstuvwxyzABCDEFGHIJKLIMNPQRSTUVWXYZ"
+letters = "0123456789"
 def toonehot(text):
     labellist = []
     for letter in text:
-        onehot = [0 for _ in range(63)]
+        onehot = [0 for _ in range(10)]
         num = letters.find(letter)
         onehot[num] = 1
         labellist.append(onehot)
@@ -30,9 +30,9 @@ def toonehot(text):
 # print(a)
 # print(a.shape)
 
-for i in range(1,5):
+for i in range(1,2):
     print(i)
-    train_data_temporary = np.load("./img_data_gray/train_data"+str(i)+".npy")
+    train_data_temporary = np.load("/home/cbc106013/deep_learning/captcha/img_data_gray/nptu_create"+str(i)+".npy")
     if i == 1:
         train_data = train_data_temporary
     else:
@@ -43,7 +43,7 @@ for i in range(1,5):
 # #==========================rgb2gray
 # train_data=rgb2gray(train_data)
 
-train_data= train_data.reshape(-1,60,160,1)
+train_data= train_data.reshape(-1,35,95,1)
 print(train_data.shape)
 #==========================csv load
 # traincsv = open('/home/cbc106013/deep_learning/captcha_cnn/test.csv', 'r', encoding = 'utf8')
@@ -56,14 +56,14 @@ print(train_data.shape)
 digit = []
 
 for i in range(1,5,1):
-    for j in range(1,5):
-        file = open('./label_csv/train_label'+str(j)+'.csv', 'r')  # csv_file_name
+    for j in range(1,2):
+        file = open('./label_csv/nptu_create'+str(j)+'.csv', 'r')  # csv_file_name
         reader = csv.reader(file)
         for row in reader:
             digit.append(row[i])
 file.close()
 digit = np.array(toonehot(digit))
-train_label = digit.reshape(4, -1, 63)
+train_label = digit.reshape(4, -1, 10)
 
 #==========================old
 # digit = []
@@ -88,12 +88,12 @@ train_label = [arr for arr in np.asarray(train_label)]
 print(train_label)
 #===================================test
 for i in range(1,2):
-    test_data_temporary = np.load("./img_data_gray/test_data"+str(i)+".npy")
+    test_data_temporary = np.load("/home/cbc106013/deep_learning/captcha/img_data_gray/nptu_create"+str(i)+".npy")
     if i == 1:
         test_data = test_data_temporary
     else:
         test_data = np.concatenate((test_data,test_data_temporary),axis=0)
-test_data= test_data.reshape(-1,60,160,1)
+test_data= test_data.reshape(-1,35,95,1)
 print(test_data.shape)
 
 
@@ -102,13 +102,13 @@ digit_test = []
 
 for i in range(1,5,1):
     for j in range(1,2):
-        file = open('./label_csv/test_label'+str(j)+'.csv', 'r')  # csv_file_name
+        file = open('./label_csv/nptu_create'+str(j)+'.csv', 'r')  # csv_file_name
         reader = csv.reader(file)
         for row in reader:
             digit_test.append(row[i])
 file.close()
 digit_test = np.array(toonehot(digit_test))
-test_label = digit_test.reshape(4, -1, 63)
+test_label = digit_test.reshape(4, -1, 10)
 
 print(test_label)
 print(test_label.shape)
@@ -153,7 +153,7 @@ print(test_label)
 # Create CNN Model
 print("Creating CNN model...")
 # in = Input((60,160))
-input = Input(shape=(60,160,1), name='Input')
+input = Input(shape=(35,95,1), name='Input')
 out = input
 out = Conv2D(filters=8, kernel_size=(3, 3), padding='same', activation='relu')(out)
 out = Conv2D(filters=8, kernel_size=(3, 3), activation='relu')(out)
@@ -171,8 +171,8 @@ out = Dropout(0.3)(out)
 out = Conv2D(filters=64, kernel_size=(3, 3), padding='same', activation='relu')(out)
 out = Conv2D(filters=64, kernel_size=(3, 3), activation='relu')(out)
 out = BatchNormalization()(out)
-out = MaxPooling2D(pool_size=(2, 2))(out)
-out = Dropout(0.3)(out)
+# out = MaxPooling2D(pool_size=(2, 2))(out)
+# out = Dropout(0.3)(out)
 out = Conv2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu')(out)
 out = Conv2D(filters=128, kernel_size=(3, 3), activation='relu')(out)
 out = BatchNormalization()(out)
@@ -182,16 +182,16 @@ out = Conv2D(filters=256, kernel_size=(3, 3), activation='relu')(out)
 out = MaxPooling2D(pool_size=(2, 2))(out)
 out = Dropout(0.3)(out)
 out = Flatten()(out)
-out = [Dense(63, name='digit1', activation='softmax')(out),\
-    Dense(63, name='digit2', activation='softmax')(out),\
-    Dense(63, name='digit3', activation='softmax')(out),\
-    Dense(63, name='digit4', activation='softmax')(out)]
+out = [Dense(10, name='digit1', activation='softmax')(out),\
+    Dense(10, name='digit2', activation='softmax')(out),\
+    Dense(10, name='digit3', activation='softmax')(out),\
+    Dense(10, name='digit4', activation='softmax')(out)]
 model = Model(input, out)
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.summary()#show
 
 #==========================儲存最佳辨識率的模型
-filepath="./model/captcha4.h5"
+filepath="./model/nptu.h5"
 #==========================每次epoch完會檢查一次，如果比先前最佳的acc高，就會儲存model到filepath
 checkpoint = ModelCheckpoint(filepath, monitor='val_digit3_acc', verbose=1, save_best_only=True, mode='max')
 #===========================也就是在驗證集的val_digit4_acc 下降後60次提前停止訓練
