@@ -9,7 +9,7 @@ hack captcha by cnn with keras
 <p>https://drive.google.com/drive/folders/1hGFCpwOAyu1PcSXICK2VFgi7f23vX0cx?usp=sharing</p>
 
 
-2019/01/16(更新)====================================================================
+# 2019/01/16(更新)============================
 100%
 ![image](https://github.com/cbc106013/captcha_cnn/blob/master/nptu_captch_kigison%26culdo/train100%25.png)
 
