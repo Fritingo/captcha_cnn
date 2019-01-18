@@ -4,6 +4,7 @@ hack captcha by cnn with keras
 ## using: 
 * tensorflow-gpu==1.11.0
 * keras==2.2.2
+* windows 10
 
 # 奕文計畫
 
