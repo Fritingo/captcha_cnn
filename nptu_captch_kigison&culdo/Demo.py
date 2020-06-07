@@ -6,16 +6,14 @@ from PIL import Image
 import io
 from time import sleep
 
+account = "account"
+password = "password"
+
 letters = "0123456789"
 
 browser = Chrome("chromedriver.exe") # chromedriver 路徑
+browser.set_window_size(1080,720)
 browser.get('https://webap.nptu.edu.tw/Web/Secure/default.aspx')
-browser.find_element_by_id("LoginDefault_ibtLoginStd").click()
-captcha_img = browser.find_element_by_id('imgCaptcha')
-set_CheckCode = browser.find_element_by_id('LoginStd_txtCheckCode')
-
-
-
 
 model = load_model('nptu_captch.h5')
 
@@ -26,6 +24,11 @@ def rgb2gray(rgb):
 
 
 for i in range(10):  #predict 份數
+    browser.find_element_by_id("LoginDefault_ibtLoginStd").click()
+    captcha_img = browser.find_element_by_id('imgCaptcha')
+    set_CheckCode = browser.find_element_by_id('LoginStd_txtCheckCode')
+    set_account = browser.find_element_by_id('LoginStd_txtAccount')
+    set_password = browser.find_element_by_id('LoginStd_txtPassWord')
     captcha_img.click()
     set_CheckCode.clear()
     img = Image.open(io.BytesIO(captcha_img.screenshot_as_png))
@@ -46,10 +49,23 @@ for i in range(10):  #predict 份數
                 ans += letters[i]
                 break
     print(ans)
+
+
+    set_account.send_keys(account)
+    set_password.send_keys(password)
+    sleep(1)
     set_CheckCode.send_keys(ans)
-    sleep(3)
+    sleep(0.2)
+    browser.find_element_by_id("LoginStd_ibtLogin").click()
+    sleep(0.5)
 
+    browser.switch_to.frame(browser.find_element_by_css_selector("frame[name='MAIN'"))
+    browser.find_element_by_id('CommonHeader_ibtLogOut').click()
+    browser.switch_to.alert.accept()
 
+    sleep(1)
+
+browser.quit()
 
 
 
