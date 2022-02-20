@@ -1,4 +1,4 @@
-hack captcha by cnn with keras
+captcha by cnn with keras
 =========================================
 
 ![image](https://github.com/cbc106013/captcha_cnn/blob/master/acc94%25.png)
